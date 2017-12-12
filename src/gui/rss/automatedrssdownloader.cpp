@@ -259,7 +259,7 @@ void AutomatedRssDownloader::updateRuleDefinitionBox()
             m_ui->comboCategory->clearEditText();
         int index = 0;
         if (m_currentRule.addPaused()) {
-            if (m_currentRule.addPaused().get())
+            if (*m_currentRule.addPaused())
                 index = 1;
             else
                 index = 2;
@@ -313,7 +313,7 @@ void AutomatedRssDownloader::initCategoryCombobox()
 {
     // Load torrent categories
     QStringList categories = BitTorrent::Session::instance()->categories().keys();
-    std::sort(categories.begin(), categories.end(), Utils::String::naturalCompareCaseInsensitive);
+    std::sort(categories.begin(), categories.end(), Utils::String::naturalLessThan<Qt::CaseInsensitive>);
     m_ui->comboCategory->addItem("");
     m_ui->comboCategory->addItems(categories);
 }

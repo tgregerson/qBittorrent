@@ -61,9 +61,9 @@ namespace
 
     QJsonValue optionalToJsonValue(const boost::optional<bool> &opt)
     {
-        if (opt)
-            return QJsonValue(*opt);
-        return QJsonValue();
+        if (!opt)
+            return QJsonValue();
+        return *opt;
     }
 
     boost::optional<bool> addPausedLegacyToOptional(int val)
@@ -77,14 +77,13 @@ namespace
 
     int optionalToAddPausedLegacy(const boost::optional<bool> &opt)
     {
-        int ret = 0; // default;
         if (opt) {
             if (*opt)
-                ret = 1; // always
+                return 1; // always
             else
-                ret = 2; // never
+                return 2; // never
         }
-        return ret;
+        return 0; // use default
     }
 }
 

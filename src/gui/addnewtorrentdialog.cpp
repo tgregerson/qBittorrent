@@ -102,7 +102,7 @@ AddNewTorrentDialog::AddNewTorrentDialog(const BitTorrent::AddTorrentParams &inP
 
     auto session = BitTorrent::Session::instance();
 
-    ui->startTorrentCheckBox->setChecked(m_torrentParams.addPaused.get_value_or(!session->isAddTorrentPaused()));
+    ui->startTorrentCheckBox->setChecked(!m_torrentParams.addPaused.get_value_or(session->isAddTorrentPaused()));
 
     ui->comboTTM->blockSignals(true); // the TreeView size isn't correct if the slot does it job at this point
     ui->comboTTM->setCurrentIndex(!session->isAutoTMMDisabledByDefault());
@@ -118,7 +118,7 @@ AddNewTorrentDialog::AddNewTorrentDialog(const BitTorrent::AddTorrentParams &inP
 
     // Load categories
     QStringList categories = session->categories().keys();
-    std::sort(categories.begin(), categories.end(), Utils::String::naturalCompareCaseInsensitive);
+    std::sort(categories.begin(), categories.end(), Utils::String::naturalLessThan<Qt::CaseInsensitive>);
     QString defaultCategory = settings()->loadValue(KEY_DEFAULTCATEGORY).toString();
 
     if (!m_torrentParams.category.isEmpty())
